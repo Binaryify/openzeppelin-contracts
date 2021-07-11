@@ -58,7 +58,7 @@ contract TimedCrowdsale is Crowdsale {
         return _closingTime;
     }
     function setClosingTime(uint256 closingTime) public {
-        require(_owner===msg.sender, "TimedCrowdsale: only owner can set closing time");
+        require(_owner == msg.sender, "TimedCrowdsale: only owner can set closing time");
         _closingTime = closingTime;
     }
 
