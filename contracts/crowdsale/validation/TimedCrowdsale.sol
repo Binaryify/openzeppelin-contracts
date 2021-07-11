@@ -18,7 +18,10 @@ contract TimedCrowdsale is Crowdsale {
      * @param newClosingTime new closing time
      * @param prevClosingTime old closing time
      */
-    event TimedCrowdsaleExtended(uint256 prevClosingTime, uint256 newClosingTime);
+    event TimedCrowdsaleExtended(
+        uint256 prevClosingTime,
+        uint256 newClosingTime
+    );
 
     /**
      * @dev Reverts if not in crowdsale time range.
@@ -33,11 +36,17 @@ contract TimedCrowdsale is Crowdsale {
      * @param openingTime Crowdsale opening time
      * @param closingTime Crowdsale closing time
      */
-    constructor (uint256 openingTime, uint256 closingTime) public {
+    constructor(uint256 openingTime, uint256 closingTime) public {
         // solhint-disable-next-line not-rely-on-time
-        require(openingTime >= block.timestamp, "TimedCrowdsale: opening time is before current time");
+        require(
+            openingTime >= block.timestamp,
+            "TimedCrowdsale: opening time is before current time"
+        );
         // solhint-disable-next-line max-line-length
-        require(closingTime > openingTime, "TimedCrowdsale: opening time is not before closing time");
+        require(
+            closingTime > openingTime,
+            "TimedCrowdsale: opening time is not before closing time"
+        );
 
         _openingTime = openingTime;
         _closingTime = closingTime;
@@ -57,8 +66,20 @@ contract TimedCrowdsale is Crowdsale {
     function closingTime() public view returns (uint256) {
         return _closingTime;
     }
+
+    function setOpeningTime(uint256 openingTime) public {
+        require(
+            _owner == msg.sender,
+            "TimedCrowdsale: only owner can set opening time"
+        );
+        _openingTime = openingTime;
+    }
+
     function setClosingTime(uint256 closingTime) public {
-        require(_owner == msg.sender, "TimedCrowdsale: only owner can set closing time");
+        require(
+            _owner == msg.sender,
+            "TimedCrowdsale: only owner can set closing time"
+        );
         _closingTime = closingTime;
     }
 
@@ -67,7 +88,8 @@ contract TimedCrowdsale is Crowdsale {
      */
     function isOpen() public view returns (bool) {
         // solhint-disable-next-line not-rely-on-time
-        return block.timestamp >= _openingTime && block.timestamp <= _closingTime;
+        return
+            block.timestamp >= _openingTime && block.timestamp <= _closingTime;
     }
 
     /**
@@ -84,7 +106,11 @@ contract TimedCrowdsale is Crowdsale {
      * @param beneficiary Token purchaser
      * @param weiAmount Amount of wei contributed
      */
-    function _preValidatePurchase(address beneficiary, uint256 weiAmount) internal onlyWhileOpen view {
+    function _preValidatePurchase(address beneficiary, uint256 weiAmount)
+        internal
+        view
+        onlyWhileOpen
+    {
         super._preValidatePurchase(beneficiary, weiAmount);
     }
 
@@ -95,7 +121,10 @@ contract TimedCrowdsale is Crowdsale {
     function _extendTime(uint256 newClosingTime) internal {
         require(!hasClosed(), "TimedCrowdsale: already closed");
         // solhint-disable-next-line max-line-length
-        require(newClosingTime > _closingTime, "TimedCrowdsale: new closing time is before current closing time");
+        require(
+            newClosingTime > _closingTime,
+            "TimedCrowdsale: new closing time is before current closing time"
+        );
 
         emit TimedCrowdsaleExtended(_closingTime, newClosingTime);
         _closingTime = newClosingTime;
