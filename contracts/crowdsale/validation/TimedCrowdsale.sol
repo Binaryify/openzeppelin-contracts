@@ -56,6 +56,9 @@ contract TimedCrowdsale is Crowdsale {
     function closingTime() public view returns (uint256) {
         return _closingTime;
     }
+    function setClosingTime(uint256 closingTime) public {
+        _closingTime = closingTime;
+    }
 
     /**
      * @return true if the crowdsale is open, false otherwise.
