@@ -12,7 +12,7 @@ contract TimedCrowdsale is Crowdsale {
 
     uint256 private _openingTime;
     uint256 private _closingTime;
-
+    address private _owner;
     /**
      * Event for crowdsale extending
      * @param newClosingTime new closing time
@@ -41,6 +41,7 @@ contract TimedCrowdsale is Crowdsale {
 
         _openingTime = openingTime;
         _closingTime = closingTime;
+        _owner = msg.sender;
     }
 
     /**
@@ -57,6 +58,7 @@ contract TimedCrowdsale is Crowdsale {
         return _closingTime;
     }
     function setClosingTime(uint256 closingTime) public {
+        require(_owner===msg.sender, "TimedCrowdsale: only owner can set closing time");
         _closingTime = closingTime;
     }
 
